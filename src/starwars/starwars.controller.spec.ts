@@ -1,9 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateCharacterRequest } from 'src/models/UpdateCharacterRequest';
-import { CharacterId } from '../models/CharacterId';
-import { CreateCharacterRequest } from '../models/CreateCharacterRequest';
+import { UpdateCharacterRequest } from '../interfaces/updateCharacterRequest.interface';
+import { CharacterId } from '../models/characterId';
 import { StarwarsController } from './starwars.controller';
 import { StarwarsService } from './starwars.service';
+import { QueryOptions } from '../configs/query-options.config';
+import { CharacterModel } from '../models/character.model';
+import { CharacterDTO } from '../interfaces/character.dto';
+import { StarwarsRepository } from '../repositories/starwars-repository';
 
 jest.mock('../starwars/starwars.service.ts');
 
@@ -26,17 +29,17 @@ describe('StarwarsController', () => {
   });
 
   it('should call the service get', () => {
-    controller.get();
-    expect(service.get).toHaveBeenCalled();
+    controller.getAll({ query: { page: 1, limit: 1 } });
+    expect(service.getAll).toHaveBeenCalled();
   });
 
   it('should call the service post', () => {
-    const createCharacterRequest: CreateCharacterRequest = {
-      name: CharacterId.from('Luke Skywalker'),
+    const characterRequest: CharacterDTO = {
+      name: 'Luke Skywalker',
       episodes: ['NEWHOPE', 'EMPIRE'],
       planet: null,
     };
-    controller.post(createCharacterRequest);
+    controller.post(characterRequest);
     expect(service.post).toHaveBeenCalled();
   });
 

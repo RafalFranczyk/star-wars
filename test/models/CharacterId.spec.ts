@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { CharacterId } from '../../src/models/CharacterId';
+import { CharacterId } from '../../src/models/characterId';
 describe('CharacterId', () => {
   it('should throw error, id is null', () => {
     const id = null;
