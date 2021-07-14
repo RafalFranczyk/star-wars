@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CharacterId } from '../models/CharacterId';
-import { CreateCharacterRequest } from '../models/CreateCharacterRequest';
+import { CharacterModel } from 'src/models/character.model';
+import { CharacterId } from '../models/characterId';
 import {
   PostCharacterRequest,
   PostRequestStarWarsPipe,
@@ -35,7 +35,7 @@ describe('PostRequestStarWarsPipe', () => {
       episodes: ['NEWHOPE', 'EMPIRE', 'JEDI'],
       planet: null,
     };
-    const createCharacterRequest: CreateCharacterRequest = {
+    const createCharacterRequest: CharacterModel = {
       name: CharacterId.from(postCharacterRequest.name),
       episodes: ['NEWHOPE', 'EMPIRE', 'JEDI'],
       planet: null,

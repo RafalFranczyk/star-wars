@@ -1,22 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CharacterId } from '../models/CharacterId';
-import { UpdateCharacterRequest } from '../models/UpdateCharacterRequest';
-import { CreateCharacterRequest } from '../models/CreateCharacterRequest';
+import { CharacterId } from '../models/characterId';
+import { UpdateCharacterRequest } from '../interfaces/updateCharacterRequest.interface';
 import { StarwarsRepository } from '../repositories/starwars-repository';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CharacterDTO } from '../interfaces/character.dto';
+import { CharacterModel } from '../models/character.model';
+import { QueryOptions } from '../configs/query-options.config';
+import { CharacterPagination } from '../models/character.pagination';
 
 @Injectable()
 export class StarwarsService {
-  constructor(private repository: StarwarsRepository) {}
-  get() {
-    return this.repository.get();
+  constructor(
+    private repository: StarwarsRepository,
+    @InjectModel('StarWarCharacter')
+    private readonly characterModel: Model<CharacterModel>,
+  ) {}
+
+  async getAll(options: QueryOptions): Promise<CharacterPagination> {
+    const result = this.repository.get(options, this.characterModel);
+    return result;
   }
-  post(data: CreateCharacterRequest) {
-    this.repository.post(data);
+  async post(data: CharacterDTO): Promise<CharacterModel> {
+    const result = this.repository.post(data, this.characterModel);
+    return result;
   }
-  put(id: CharacterId, character: UpdateCharacterRequest) {
-    this.repository.put(id, character);
+  async put(name: CharacterId, character: UpdateCharacterRequest) {
+    this.repository.put(name, character, this.characterModel);
   }
-  delete(id: CharacterId) {
-    this.repository.delete(id);
+  async delete(name: CharacterId) {
+    this.repository.delete(name, this.characterModel);
   }
 }

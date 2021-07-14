@@ -6,36 +6,41 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
-import { CharacterId } from '../models/CharacterId';
-import { UpdateCharacterRequest } from '../models/UpdateCharacterRequest';
-import { CreateCharacterRequest } from '../models/CreateCharacterRequest';
+import { CharacterId } from '../models/characterId';
+import { UpdateCharacterRequest } from '../interfaces/updateCharacterRequest.interface';
 import { StarwarsService } from './starwars.service';
-import { PostRequestStarWarsPipe } from '../pipes/post-request-star-wars.pipe';
+import { CharacterDTO } from '../interfaces/character.dto';
+import { QueryOptions } from '../configs/query-options.config';
 
 @Controller('starwars')
 export class StarwarsController {
   constructor(private service: StarwarsService) {}
 
   @Get()
-  public get() {
-    return this.service.get();
+  public getAll(@Req() req) {
+    const options: QueryOptions = {
+      page: req.query.page != null ? parseInt(req.query.page) : null,
+      limit: req.query.limit != null ? parseInt(req.query.limit) : null,
+    };
+    return this.service.getAll(options);
   }
 
   @Post()
   public post(
-    @Body(new PostRequestStarWarsPipe())
-    createCharacterRequest: CreateCharacterRequest,
+    @Body()
+    createCharacterRequest: CharacterDTO,
   ) {
-    this.service.post(createCharacterRequest);
+    return this.service.post(createCharacterRequest);
   }
 
-  @Put(':id')
+  @Put(':name')
   public put(
-    @Param('id') id: CharacterId,
+    @Param('name') name: CharacterId,
     @Body() character: UpdateCharacterRequest,
   ) {
-    this.service.put(id, character);
+    this.service.put(name, character);
   }
 
   @Delete(':id')
