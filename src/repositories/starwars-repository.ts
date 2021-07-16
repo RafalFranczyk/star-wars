@@ -2,11 +2,10 @@
 import { Injectable } from '@nestjs/common';
 import { CharacterModel } from '../models/character.model';
 import { CharacterPagination } from '../models/character.pagination';
-import { UpdateCharacterRequest } from '../interfaces/updateCharacterRequest.interface';
-import { CharacterId } from '../models/characterId';
+import { PutCharacterDTO } from '../interfaces/update-character.dto';
 import { QueryOptions } from '../configs/query-options.config';
 import { Model } from 'mongoose';
-import { CharacterDTO } from '../interfaces/character.dto';
+import { PostCharacterDTO } from '../interfaces/post-character.dto';
 @Injectable()
 export class StarwarsRepository {
   async get(
@@ -16,7 +15,7 @@ export class StarwarsRepository {
     const totalRecords = await characterModel.count().exec();
     const characterDocs = await characterModel
       .find()
-      .skip((options.page - 1) * options.limit)
+      .skip(((options.page != null ? options.page : 1) - 1) * options.limit)
       .limit(options.limit)
       .exec();
 
@@ -33,17 +32,18 @@ export class StarwarsRepository {
     return characters;
   }
 
-  async post(data: CharacterDTO, characterModel: Model<CharacterModel>) {
-    const retCharacter = await characterModel.create(data as CharacterDTO);
+  async post(data: PostCharacterDTO, characterModel: Model<CharacterModel>) {
+    const retCharacter = await characterModel.create(data as PostCharacterDTO);
     return {
       name: retCharacter.name,
       episodes: retCharacter.episodes,
       planet: retCharacter.planet,
     };
   }
+
   async put(
-    name: CharacterId,
-    character: UpdateCharacterRequest,
+    name: string,
+    character: PutCharacterDTO,
     characterModel: Model<CharacterModel>,
   ) {
     const temporary: CharacterModel = {
@@ -51,16 +51,21 @@ export class StarwarsRepository {
       episodes: character.episodes,
       planet: character.planet,
     };
-    await characterModel
+    return await characterModel
       .findOneAndUpdate(
         {
           name: name,
         },
         temporary,
+        { useFindAndModify: false },
       )
       .exec();
   }
-  async delete(name: CharacterId, characterModel: Model<CharacterModel>) {
-    await characterModel.findOneAndDelete({ name: name }).exec();
+
+  async delete(name: string, characterModel: Model<CharacterModel>) {
+    const delete_model = await characterModel
+      .findOneAndDelete({ name: name })
+      .exec();
+    return delete_model;
   }
 }

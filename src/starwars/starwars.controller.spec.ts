@@ -1,18 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateCharacterRequest } from '../interfaces/updateCharacterRequest.interface';
-import { CharacterId } from '../models/characterId';
+import { PutCharacterDTO } from '../interfaces/update-character.dto';
 import { StarwarsController } from './starwars.controller';
 import { StarwarsService } from './starwars.service';
-import { QueryOptions } from '../configs/query-options.config';
 import { CharacterModel } from '../models/character.model';
-import { CharacterDTO } from '../interfaces/character.dto';
-import { StarwarsRepository } from '../repositories/starwars-repository';
-
+import { PostCharacterDTO } from '../interfaces/post-character.dto';
+import { NotFoundException } from '@nestjs/common';
+import { Model } from 'mongoose';
 jest.mock('../starwars/starwars.service.ts');
 
 describe('StarwarsController', () => {
   let controller: StarwarsController;
   let service: StarwarsService;
+  const model_character: CharacterModel = {
+    name: 'luke',
+    planet: null,
+    episodes: ['asd'],
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,6 +25,10 @@ describe('StarwarsController', () => {
 
     controller = module.get<StarwarsController>(StarwarsController);
     service = module.get<StarwarsService>(StarwarsService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -34,7 +41,7 @@ describe('StarwarsController', () => {
   });
 
   it('should call the service post', () => {
-    const characterRequest: CharacterDTO = {
+    const characterRequest: PostCharacterDTO = {
       name: 'Luke Skywalker',
       episodes: ['NEWHOPE', 'EMPIRE'],
       planet: null,
@@ -44,8 +51,8 @@ describe('StarwarsController', () => {
   });
 
   it('should call the service put', () => {
-    const characterId = CharacterId.from('Luke Skywalker');
-    const updateCharacterRequest: UpdateCharacterRequest = {
+    const characterId = 'Luke Skywalker';
+    const updateCharacterRequest: PutCharacterDTO = {
       episodes: ['NEWHOPE', 'EMPIRE', 'JEDI'],
       planet: null,
     };
@@ -54,9 +61,21 @@ describe('StarwarsController', () => {
     expect(service.put).toHaveBeenCalled();
   });
 
-  it('should call the service delete', () => {
-    const deleteCharacterRequest: CharacterId = CharacterId.from('xyz');
-    controller.delete(deleteCharacterRequest);
-    expect(service.delete).toHaveBeenCalled();
+  describe('delete character', () => {
+    it('should call the service delete', () => {
+      const deleteCharacterRequest = 'xyz';
+      controller.delete(deleteCharacterRequest);
+      expect(service.delete).toHaveBeenCalled();
+    });
+
+    //it('should return that it deleted a star wars character', () => {
+    //  const deleteStarWarsCharacter = jest
+    //    .fn()
+    //    .mockResolvedValueOnce(model_character);
+    //
+    //  expect(controller.delete('exist star wars character')).resolves.toEqual(
+    //    deleteStarWarsCharacter,
+    //  );
+    //});
   });
 });

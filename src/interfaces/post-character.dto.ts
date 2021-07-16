@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-export interface CharacterModel {
+export interface PostCharacterDTO {
   name: string;
   episodes: Array<string>;
-  planet: string | null;
+  planet?: string;
 }
