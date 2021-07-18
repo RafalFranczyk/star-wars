@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CharacterModel } from '../models/character.model';
 import { CharacterPagination } from '../models/character.pagination';
 import { PutCharacterDTO } from '../interfaces/update-character.dto';
@@ -12,16 +12,19 @@ export class StarwarsRepository {
     options: QueryOptions,
     characterModel: Model<CharacterModel>,
   ): Promise<CharacterPagination> {
-    const totalRecords = await characterModel.count().exec();
+    const totalRecords = await characterModel.countDocuments().exec();
+    const totalPages =
+      options.limit != null ? Math.ceil(totalRecords / options.limit) : 1;
     const characterDocs = await characterModel
       .find()
-      .skip(((options.page != null ? options.page : 1) - 1) * options.limit)
+      .skip(((options.page ?? 1) - 1) * options.limit)
       .limit(options.limit)
+      .lean(true)
       .exec();
 
     const characters: CharacterPagination = {
-      totalPages:
-        options.limit != null ? Math.ceil(totalRecords / options.limit) : 1,
+      currentPage: options.limit != null ? options.page ?? 1 : 1,
+      totalPages: totalPages,
       totalRecords: totalRecords,
       characters: characterDocs.map((doc) => ({
         name: doc.name,
@@ -33,19 +36,21 @@ export class StarwarsRepository {
   }
 
   async post(data: PostCharacterDTO, characterModel: Model<CharacterModel>) {
-    const retCharacter = await characterModel.create(data as PostCharacterDTO);
-    return {
+    const retCharacter = await characterModel.create(data);
+
+    const result: CharacterModel = {
       name: retCharacter.name,
       episodes: retCharacter.episodes,
       planet: retCharacter.planet,
     };
+    return result;
   }
 
   async put(
     name: string,
     character: PutCharacterDTO,
     characterModel: Model<CharacterModel>,
-  ) {
+  ): Promise<CharacterModel> {
     const temporary: CharacterModel = {
       name: name,
       episodes: character.episodes,
@@ -59,10 +64,14 @@ export class StarwarsRepository {
         temporary,
         { useFindAndModify: false },
       )
+      .lean(true)
       .exec();
   }
 
-  async delete(name: string, characterModel: Model<CharacterModel>) {
+  async delete(
+    name: string,
+    characterModel: Model<CharacterModel>,
+  ): Promise<CharacterModel> {
     const delete_model = await characterModel
       .findOneAndDelete({ name: name })
       .exec();

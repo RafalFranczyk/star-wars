@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { StarwarsRepository } from 'src/repositories/starwars-repository';
+import { StarwarsRepository } from '../repositories/starwars-repository';
 import { StarwarsController } from './starwars.controller';
 import { StarwarsService } from './starwars.service';
 import { MongooseModule } from '@nestjs/mongoose';

@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Query,
   UsePipes,
 } from '@nestjs/common';
 import { PutCharacterDTO } from '../interfaces/update-character.dto';
@@ -17,22 +17,30 @@ import { PostCharacterDTO } from '../interfaces/post-character.dto';
 import { QueryOptions } from '../configs/query-options.config';
 import { PostJoiValidationPipe } from '../pipes/post-joi-validation.pipe';
 import { PutJoiValidationPipe } from '../pipes/put-joi-validation.pipe';
-
+import { ApiQuery } from '@nestjs/swagger';
 @Controller('starwars')
 export class StarwarsController {
   constructor(private service: StarwarsService) {}
 
   @Get()
-  public getAll(@Req() req) {
-    try {
-      const options: QueryOptions = {
-        page: req.query.page,
-        limit: req.query.limit,
-      };
-      return this.service.getAll(options);
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+  @ApiQuery({
+    name: 'limit',
+    description: 'The maximum number of characters in response',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number (pagination)',
+    required: false,
+    type: Number,
+  })
+  public getAll(@Query('page') page: number, @Query('limit') limit: number) {
+    const options: QueryOptions = {
+      page: page,
+      limit: limit,
+    };
+    return this.service.getAll(options);
   }
 
   @Post()
@@ -41,11 +49,7 @@ export class StarwarsController {
     @Body()
     createCharacterRequest: PostCharacterDTO,
   ) {
-    try {
-      return this.service.post(createCharacterRequest);
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    return this.service.post(createCharacterRequest);
   }
 
   @Put(':name')
@@ -54,22 +58,11 @@ export class StarwarsController {
     @Param('name') name: string,
     @Body() character: PutCharacterDTO,
   ) {
-    try {
-      const result = await this.service.put(name, character);
-      if (!result) throw new NotFoundException('Star Wars character not found');
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    return await this.service.put(name, character);
   }
 
   @Delete(':name')
   public async delete(@Param('name') characterId: string) {
-    try {
-      const deleteModel = await this.service.delete(characterId);
-      if (!deleteModel)
-        throw new NotFoundException('Star Wars character not found');
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    return await this.service.delete(characterId);
   }
 }

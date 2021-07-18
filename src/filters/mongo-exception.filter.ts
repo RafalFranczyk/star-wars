@@ -8,12 +8,16 @@ export class MongoExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+    const status = exception.code == 11000 ? 409 : 400;
 
-    response.status(exception.code == 11000 ? 409 : 400).json({
-      mongodbStatusCode: exception.code,
-      mongodbMessage: exception.message,
-      timestamp: new Date().toISOString(),
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString().split('.')[0] + 'Z',
       path: request.url,
+      method: request.method,
+      response: {
+        message: exception.message,
+      },
     });
   }
 }
