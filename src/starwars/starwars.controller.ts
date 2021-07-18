@@ -1,50 +1,68 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
   Put,
-  Req,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
-import { CharacterId } from '../models/characterId';
-import { UpdateCharacterRequest } from '../interfaces/updateCharacterRequest.interface';
+import { PutCharacterDTO } from '../interfaces/update-character.dto';
 import { StarwarsService } from './starwars.service';
-import { CharacterDTO } from '../interfaces/character.dto';
+import { PostCharacterDTO } from '../interfaces/post-character.dto';
 import { QueryOptions } from '../configs/query-options.config';
-
+import { PostJoiValidationPipe } from '../pipes/post-joi-validation.pipe';
+import { PutJoiValidationPipe } from '../pipes/put-joi-validation.pipe';
+import { ApiQuery } from '@nestjs/swagger';
 @Controller('starwars')
 export class StarwarsController {
   constructor(private service: StarwarsService) {}
 
   @Get()
-  public getAll(@Req() req) {
+  @ApiQuery({
+    name: 'limit',
+    description: 'The maximum number of characters in response',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number (pagination)',
+    required: false,
+    type: Number,
+  })
+  public getAll(@Query('page') page: number, @Query('limit') limit: number) {
     const options: QueryOptions = {
-      page: req.query.page != null ? parseInt(req.query.page) : null,
-      limit: req.query.limit != null ? parseInt(req.query.limit) : null,
+      page: page,
+      limit: limit,
     };
     return this.service.getAll(options);
   }
 
   @Post()
+  @UsePipes(new PostJoiValidationPipe())
   public post(
     @Body()
-    createCharacterRequest: CharacterDTO,
+    createCharacterRequest: PostCharacterDTO,
   ) {
     return this.service.post(createCharacterRequest);
   }
 
   @Put(':name')
-  public put(
-    @Param('name') name: CharacterId,
-    @Body() character: UpdateCharacterRequest,
+  @UsePipes(new PutJoiValidationPipe())
+  public async put(
+    @Param('name') name: string,
+    @Body() character: PutCharacterDTO,
   ) {
-    this.service.put(name, character);
+    return await this.service.put(name, character);
   }
 
-  @Delete(':id')
-  public delete(@Param('id') characterId: CharacterId) {
-    this.service.delete(characterId);
+  @Delete(':name')
+  public async delete(@Param('name') characterId: string) {
+    return await this.service.delete(characterId);
   }
 }

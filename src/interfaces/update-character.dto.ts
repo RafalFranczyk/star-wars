@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-export interface UpdateCharacterRequest {
+export interface PutCharacterDTO {
   episodes: Array<string>;
-  planet: string | null;
+  planet?: string;
 }
