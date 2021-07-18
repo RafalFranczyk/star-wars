@@ -13,7 +13,7 @@ export class PutJoiValidationPipe implements PipeTransform {
       const schema = Joi.string().min(3).max(50).required();
       const { error } = schema.validate(value);
       if (error) {
-        throw new BadRequestException(error.details[0].message);
+        throw new BadRequestException({ message: error.details[0].message });
       }
       return value;
     } else if (metadata.type === 'body') {
@@ -24,7 +24,7 @@ export class PutJoiValidationPipe implements PipeTransform {
       const { error } = schema.validate(value);
 
       if (error) {
-        throw new BadRequestException(error.details[0].message);
+        throw new BadRequestException({ message: error.details[0].message });
       }
 
       const character: PutCharacterDTO = {

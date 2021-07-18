@@ -180,7 +180,7 @@ describe('AppController (e2e)', () => {
           },
         });
     });
-    /*
+
     it('/starwars incorrect model', async () => {
       return await request(app.getHttpServer())
         .post('/starwars')
@@ -192,9 +192,7 @@ describe('AppController (e2e)', () => {
           path: '/starwars',
           method: 'POST',
           response: {
-            statusCode: 400,
             message: '"name" is required',
-            error: 'Bad Request',
           },
         });
     });
@@ -209,13 +207,10 @@ describe('AppController (e2e)', () => {
           path: '/starwars',
           method: 'POST',
           response: {
-            statusCode: 400,
             message: '"name" is required',
-            error: 'Bad Request',
           },
         });
     });
-    */
   });
 
   describe('/starwars (PUT)', () => {
@@ -243,7 +238,6 @@ describe('AppController (e2e)', () => {
           path: '/starwars/qqq',
           method: 'PUT',
           response: {
-            updated: false,
             message: 'Star Wars character not found',
           },
         });
@@ -260,9 +254,7 @@ describe('AppController (e2e)', () => {
           path: '/starwars/xyz',
           method: 'PUT',
           response: {
-            statusCode: 400,
             message: '"episodes" is required',
-            error: 'Bad Request',
           },
         });
     });
@@ -277,9 +269,7 @@ describe('AppController (e2e)', () => {
           path: '/starwars/xyz',
           method: 'PUT',
           response: {
-            statusCode: 400,
             message: '"episodes" is required',
-            error: 'Bad Request',
           },
         });
     });
@@ -307,7 +297,6 @@ describe('AppController (e2e)', () => {
           path: '/starwars/xyz',
           method: 'DELETE',
           response: {
-            deleted: false,
             message: 'Star Wars character not found',
           },
         });

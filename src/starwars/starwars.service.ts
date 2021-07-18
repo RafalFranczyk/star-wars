@@ -27,7 +27,7 @@ export class StarwarsService {
     try {
       return this.repository.post(data, this.characterModel);
     } catch (error) {
-      throw new BadRequestException({ created: false, message: error.message });
+      throw new BadRequestException({ message: error.message });
     }
   }
   async put(name: string, character: PutCharacterDTO) {
@@ -44,7 +44,7 @@ export class StarwarsService {
 
       return { updated: true };
     } catch (error) {
-      throw new BadRequestException({ updated: false, message: error.message });
+      throw new BadRequestException({ message: error.message });
     }
   }
 
@@ -62,7 +62,7 @@ export class StarwarsService {
 
       return { deleted: true };
     } catch (error) {
-      throw new BadRequestException({ deleted: false, message: error.message });
+      throw new BadRequestException({ message: error.message });
     }
   }
 }

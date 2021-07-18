@@ -63,7 +63,6 @@ describe('StarwarsRepository', () => {
     }).compile();
 
     repository = module.get<StarwarsRepository>(StarwarsRepository);
-    // The string to get the model is: 'token used as name in Mongoose.forFeature' + 'Model'
     starWarsCharacterModel = module.get<Model<CharacterModel>>(
       'StarWarCharacterModel',
     );
