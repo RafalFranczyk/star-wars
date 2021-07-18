@@ -21,7 +21,7 @@ export class PostJoiValidationPipe implements PipeTransform<PostCharacterDTO> {
     const { error } = schema.validate(value);
 
     if (error) {
-      throw new BadRequestException(error.details[0].message);
+      throw new BadRequestException({ message: error.details[0].message });
     }
 
     const character: PostCharacterDTO = {
