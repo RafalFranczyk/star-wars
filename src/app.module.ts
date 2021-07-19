@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Scope } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { StarwarsModule } from './starwars/starwars.module';
@@ -7,6 +7,10 @@ import { RequestMethod } from '@nestjs/common';
 import { GetMiddleware } from './middlewares/get.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { config } from './configs/config';
+import { TimeoutInterceptor } from './interceptor/timeout.interceptor';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { MongoExceptionFilter } from './filters/mongo-exception.filter';
 
 @Module({
   imports: [
