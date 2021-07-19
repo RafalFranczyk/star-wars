@@ -4,7 +4,6 @@ import { StarwarsController } from './starwars.controller';
 import { StarwarsService } from './starwars.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StarWarCharacterSchema } from '../schemas/starWarsCharacters.schema';
-
 @Module({
   imports: [
     MongooseModule.forFeature([

@@ -13,6 +13,7 @@ import { closeInMongodbConnection } from '../src/test-utils/mongo/MongooseTestMo
 import { MongooseModule } from '@nestjs/mongoose';
 import { StarWarCharacterSchema } from '../src/schemas/starWarsCharacters.schema';
 import { PutCharacterDTO } from '../src/interfaces/update-character.dto';
+import { TimeoutInterceptor } from '../src/interceptor/timeout.interceptor';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -94,7 +95,7 @@ describe('AppController (e2e)', () => {
     it('/starwars get all characters without page and limit', async () => {
       const limit = null;
       const page = null;
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
         .get('/starwars')
         .expect({
           currentPage: limit != null ? page ?? 1 : 1,
@@ -112,7 +113,7 @@ describe('AppController (e2e)', () => {
     it('/starwars get all characters with set page and limit', async () => {
       const limit = 2;
       const page = 1;
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
         .get('/starwars')
         .query({ page: page, limit: limit })
         .expect({
@@ -131,7 +132,7 @@ describe('AppController (e2e)', () => {
     it('/starwars get all characters with invalid page and limit value', async () => {
       const limit = 'invalid_limit_value';
       const page = 'invalid_page_value';
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
         .get('/starwars')
         .query({ page: page, limit: limit })
         .expect({
@@ -154,16 +155,16 @@ describe('AppController (e2e)', () => {
       planet: null,
     };
 
-    it('/starwars correct data', () => {
-      return request(app.getHttpServer())
+    it('/starwars correct data', async () => {
+      return await request(app.getHttpServer())
         .post('/starwars')
         .send(create_character_correct_model)
         .expect(201)
         .expect(create_character_correct_model);
     });
 
-    it('/starwars already exist characters', () => {
-      return request(app.getHttpServer())
+    it('/starwars already exist characters', async () => {
+      return await request(app.getHttpServer())
         .post('/starwars')
         .expect(409)
         .send(create_character_correct_model)
@@ -198,7 +199,7 @@ describe('AppController (e2e)', () => {
     });
 
     it('/starwars null body', async () => {
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
         .post('/starwars')
         .expect(400)
         .expect({

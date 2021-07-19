@@ -9,6 +9,8 @@ import {
   Post,
   Put,
   Query,
+  UseFilters,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { PutCharacterDTO } from '../interfaces/update-character.dto';
@@ -25,7 +27,6 @@ import {
   SuccessGetResponse,
   SuccessUpdateResponse,
 } from '../models/response.model';
-
 @ApiTags('Star Wars')
 @Controller('starwars')
 export class StarwarsController {
