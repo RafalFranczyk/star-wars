@@ -5,7 +5,6 @@ import { StarwarsModule } from './starwars/starwars.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RequestMethod } from '@nestjs/common';
 import { GetMiddleware } from './middlewares/get.middleware';
-
 @Module({
   imports: [
     StarwarsModule,
