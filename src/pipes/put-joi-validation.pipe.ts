@@ -8,13 +8,8 @@ import * as Joi from 'joi';
 import { PutCharacterDTO } from 'src/interfaces/update-character.dto';
 @Injectable()
 export class PutJoiValidationPipe implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata): any {
+  transform(value: any, metadata: ArgumentMetadata): PutCharacterDTO | string {
     if (metadata.type === 'param') {
-      const schema = Joi.string().min(3).max(50).required();
-      const { error } = schema.validate(value);
-      if (error) {
-        throw new BadRequestException({ message: error.details[0].message });
-      }
       return value;
     } else if (metadata.type === 'body') {
       const schema = Joi.object({
@@ -22,11 +17,9 @@ export class PutJoiValidationPipe implements PipeTransform {
         planet: Joi.string().min(3).max(50).allow(null),
       });
       const { error } = schema.validate(value);
-
       if (error) {
         throw new BadRequestException({ message: error.details[0].message });
       }
-
       const character: PutCharacterDTO = {
         episodes: value.episodes,
         planet: value.planet,

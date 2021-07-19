@@ -15,7 +15,10 @@ export class MongoExceptionFilter implements ExceptionFilter {
       path: request.url,
       method: request.method,
       response: {
-        message: exception.message,
+        message:
+          exception.code == 11000
+            ? 'Conflict'
+            : 'An unexpected error occurred, try again',
       },
     });
   }

@@ -145,6 +145,22 @@ describe('AppController (e2e)', () => {
           })),
         });
     });
+
+    it('/starwars return error when page and limit have negative or zero value', async () => {
+      const limit = -2;
+      const page = 2;
+      return await request(app.getHttpServer())
+        .get('/starwars')
+        .query({ page: page, limit: limit })
+        .expect({
+          statusCode: 400,
+          path: '/starwars?page=2&limit=-2',
+          method: 'GET',
+          response: {
+            message: 'Incorrect input query values',
+          },
+        });
+    });
   });
 
   describe('/starwars (POST)', () => {
@@ -172,10 +188,7 @@ describe('AppController (e2e)', () => {
           path: '/starwars',
           method: 'POST',
           response: {
-            message:
-              'E11000 duplicate key error collection: starwars.starwarcharacters index: name_1 dup key: { name: "' +
-              create_character_correct_model.name +
-              '" }',
+            message: 'Conflict',
           },
         });
     });
