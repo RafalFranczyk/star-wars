@@ -13,7 +13,6 @@ import { closeInMongodbConnection } from '../src/test-utils/mongo/MongooseTestMo
 import { MongooseModule } from '@nestjs/mongoose';
 import { StarWarCharacterSchema } from '../src/schemas/starWarsCharacters.schema';
 import { PutCharacterDTO } from '../src/interfaces/update-character.dto';
-import { TimeoutInterceptor } from '../src/interceptor/timeout.interceptor';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
