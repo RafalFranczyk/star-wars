@@ -35,6 +35,7 @@ describe('AppController (e2e)', () => {
       'StarWarCharacterModel',
     );
     app.useGlobalFilters(new HttpExceptionFilter(), new MongoExceptionFilter());
+    app.useGlobalInterceptors(new TimeoutInterceptor());
     await app.init();
   });
 

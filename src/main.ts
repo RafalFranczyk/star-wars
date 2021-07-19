@@ -3,10 +3,12 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { MongoExceptionFilter } from './filters/mongo-exception.filter';
+import { TimeoutInterceptor } from './interceptor/timeout.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter(), new MongoExceptionFilter());
+  app.useGlobalInterceptors(new TimeoutInterceptor());
   const config = new DocumentBuilder()
     .setTitle('Star Wars')
     .setDescription('Recruitment task for CodeAndPepper')
