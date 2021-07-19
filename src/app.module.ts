@@ -5,21 +5,20 @@ import { StarwarsModule } from './starwars/starwars.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RequestMethod } from '@nestjs/common';
 import { GetMiddleware } from './middlewares/get.middleware';
-import { TimeoutInterceptor } from './interceptor/timeout.interceptor';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { config } from './configs/config';
+
 @Module({
   imports: [
     StarwarsModule,
-    MongooseModule.forRoot('mongodb://localhost/starwars'),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
+    MongooseModule.forRoot(process.env.DB_CONNECTION),
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TimeoutInterceptor,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

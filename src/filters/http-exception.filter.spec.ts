@@ -60,7 +60,6 @@ describe('HttpExceptionFilter', () => {
     expect(mockJson).toBeCalledTimes(1);
     expect(mockJson).toBeCalledWith({
       statusCode: HttpStatus.BAD_REQUEST,
-      timestamp: new Date().toISOString().split('.')[0] + 'Z',
       path: 'example',
       method: 'POST',
       response: { message: 'bad request' },

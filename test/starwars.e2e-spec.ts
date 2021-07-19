@@ -13,7 +13,6 @@ import { closeInMongodbConnection } from '../src/test-utils/mongo/MongooseTestMo
 import { MongooseModule } from '@nestjs/mongoose';
 import { StarWarCharacterSchema } from '../src/schemas/starWarsCharacters.schema';
 import { PutCharacterDTO } from '../src/interfaces/update-character.dto';
-import { TimeoutInterceptor } from '../src/interceptor/timeout.interceptor';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -35,7 +34,6 @@ describe('AppController (e2e)', () => {
       'StarWarCharacterModel',
     );
     app.useGlobalFilters(new HttpExceptionFilter(), new MongoExceptionFilter());
-    app.useGlobalInterceptors(new TimeoutInterceptor());
     await app.init();
   });
 
@@ -171,7 +169,6 @@ describe('AppController (e2e)', () => {
         .send(create_character_correct_model)
         .expect({
           statusCode: 409,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars',
           method: 'POST',
           response: {
@@ -190,7 +187,6 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           statusCode: 400,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars',
           method: 'POST',
           response: {
@@ -205,7 +201,6 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           statusCode: 400,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars',
           method: 'POST',
           response: {
@@ -236,7 +231,6 @@ describe('AppController (e2e)', () => {
         .send(update_character_correct_model)
         .expect({
           statusCode: 400,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars/qqq',
           method: 'PUT',
           response: {
@@ -252,7 +246,6 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           statusCode: 400,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars/xyz',
           method: 'PUT',
           response: {
@@ -267,7 +260,6 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           statusCode: 400,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars/xyz',
           method: 'PUT',
           response: {
@@ -295,7 +287,6 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           statusCode: 400,
-          timestamp: new Date().toISOString().split('.')[0] + 'Z',
           path: '/starwars/xyz',
           method: 'DELETE',
           response: {

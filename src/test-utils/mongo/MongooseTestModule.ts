@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+
 let mongodb: MongoMemoryServer;
 
 export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
