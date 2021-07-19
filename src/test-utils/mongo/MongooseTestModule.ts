@@ -8,7 +8,8 @@ export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
   MongooseModule.forRootAsync({
     useFactory: async () => {
       mongodb = new MongoMemoryServer();
-      const mongoUri = 'mongodb://localhost/test_starwars';
+      const mongoUri =
+        'mongodb+srv://Admin:Admin@cluster0.x6pyw.mongodb.net/test_starwars?retryWrites=true&w=majority';
       return {
         uri: mongoUri,
         ...options,
