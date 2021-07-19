@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CharacterModel } from '../models/character.model';
 import { CharacterPagination } from '../models/character.pagination';
 import { PutCharacterDTO } from '../interfaces/update-character.dto';

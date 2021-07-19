@@ -1,6 +1,5 @@
 import { createMock } from '@golevelup/ts-jest';
 import { CallHandler, ExecutionContext } from '@nestjs/common';
-import { throwError } from 'rxjs';
 import { marbles } from 'rxjs-marbles/jest';
 
 import { TimeoutInterceptor } from './timeout.interceptor';

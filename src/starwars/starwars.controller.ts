@@ -1,16 +1,12 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   Post,
   Put,
   Query,
-  UseFilters,
-  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { PutCharacterDTO } from '../interfaces/update-character.dto';

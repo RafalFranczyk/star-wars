@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, HttpException } from '@nestjs/common';
-
 import { HttpExceptionFilter } from './http-exception.filter';
 
 const mockJson = jest.fn();
