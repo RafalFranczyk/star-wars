@@ -5,10 +5,17 @@ import { StarwarsModule } from './starwars/starwars.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RequestMethod } from '@nestjs/common';
 import { GetMiddleware } from './middlewares/get.middleware';
+import { ConfigModule } from '@nestjs/config';
+import { config } from './configs/config';
+
 @Module({
   imports: [
     StarwarsModule,
-    MongooseModule.forRoot('mongodb://localhost/starwars'),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
+    MongooseModule.forRoot(process.env.DB_CONNECTION),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -12,7 +12,6 @@ export class MongoExceptionFilter implements ExceptionFilter {
 
     response.status(status).json({
       statusCode: status,
-      timestamp: new Date().toISOString().split('.')[0] + 'Z',
       path: request.url,
       method: request.method,
       response: {

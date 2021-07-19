@@ -52,7 +52,6 @@ describe('MongoExceptionFilter', () => {
     expect(mockJson).toBeCalledTimes(1);
     expect(mockJson).toBeCalledWith({
       statusCode: HttpStatus.CONFLICT,
-      timestamp: new Date().toISOString().split('.')[0] + 'Z',
       path: 'example',
       method: 'POST',
       response: { message: 'DUPLICATE_KEY' },
@@ -67,7 +66,6 @@ describe('MongoExceptionFilter', () => {
     expect(mockJson).toBeCalledTimes(1);
     expect(mockJson).toBeCalledWith({
       statusCode: HttpStatus.BAD_REQUEST,
-      timestamp: new Date().toISOString().split('.')[0] + 'Z',
       path: 'example',
       method: 'POST',
       response: { message: 'OUT_OF_DISK_SPACE' },
