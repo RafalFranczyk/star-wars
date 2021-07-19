@@ -54,7 +54,7 @@ describe('MongoExceptionFilter', () => {
       statusCode: HttpStatus.CONFLICT,
       path: 'example',
       method: 'POST',
-      response: { message: 'DUPLICATE_KEY' },
+      response: { message: 'Conflict' },
     });
   });
 
@@ -68,7 +68,7 @@ describe('MongoExceptionFilter', () => {
       statusCode: HttpStatus.BAD_REQUEST,
       path: 'example',
       method: 'POST',
-      response: { message: 'OUT_OF_DISK_SPACE' },
+      response: { message: 'An unexpected error occurred, try again' },
     });
   });
 });

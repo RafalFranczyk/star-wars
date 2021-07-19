@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   CallHandler,
+  ConflictException,
   ExecutionContext,
   Injectable,
   NestInterceptor,
@@ -18,8 +20,14 @@ export class TimeoutInterceptor implements NestInterceptor {
           return throwError(
             () => new RequestTimeoutException({ message: err.message }),
           );
+        } else if (err.code == 11000 || err.status == 409) {
+          return throwError(
+            () => new ConflictException({ message: 'Conflict' }),
+          );
         }
-        return throwError(() => err.message);
+        return throwError(
+          () => new BadRequestException({ message: err.message }),
+        );
       }),
     );
   }

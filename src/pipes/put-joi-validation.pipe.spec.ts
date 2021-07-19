@@ -25,20 +25,6 @@ describe('PutJoiValidationPipe', () => {
     expect(new PutJoiValidationPipe()).toBeDefined();
   });
 
-  it('should throw error if exist problem with validation (type is param)', () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const response = () => transformer.transform('a', { type: 'param' });
-    expect(response).toThrow(BadRequestException);
-  });
-
-  it('should throw error if body not exist (type is param)', () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const response = () => transformer.transform({}, { type: 'param' });
-    expect(response).toThrow(BadRequestException);
-  });
-
   it('should return string if (type is param)', () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
